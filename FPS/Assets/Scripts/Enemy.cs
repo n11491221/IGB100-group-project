@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour {
+
+    NavMeshAgent agent;
 
     public float health = 100;
 
@@ -17,13 +20,35 @@ public class Enemy : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        agent = GetComponent<NavMeshAgent>();
 
+        //Player Reference exception catching
+        try
+        {
+            target = GameObject.FindGameObjectWithTag("Player");//Label names are case sensitive
+        }
+        catch
+        {
+            target = null;
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
+        Movement();
 
 	}
+
+    private void Movement()
+    {
+        if (target)
+        
+            agent.destination = target.transform.position;
+
+        
+
+    }
+
 
     //Public method for taking damage and dying
     public void takeDamage(float dmg) {

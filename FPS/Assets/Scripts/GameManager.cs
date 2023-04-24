@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour {
     //Singleton Setup
     public static GameManager instance = null;
 
+    public float time;
+    public float maxTime = 15;
+
     public GameObject player;
 
     // Awake Checks - Singleton setup
@@ -33,5 +36,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        time += Time.deltaTime;
+        //time = Time.time;
 	}
 }

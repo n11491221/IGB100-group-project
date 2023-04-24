@@ -13,9 +13,10 @@ public class EnemySpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-        if(Time.time > spawnTimer) {
+        if(GameManager.instance.time < GameManager.instance.maxTime && Time.time > spawnTimer) {
             Instantiate(enemy, transform.position, transform.rotation);
             spawnTimer = Time.time + spawnRate;
+
         }
 	}
 }

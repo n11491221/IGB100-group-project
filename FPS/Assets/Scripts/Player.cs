@@ -26,7 +26,7 @@ public class Player : MonoBehaviour {
     public void takeDamage(float dmg) {
         health -= dmg;
 
-        healthbar.value = (health / maxHealth);
+        //healthbar.value = (health / maxHealth);
 
         if (health <= 0) {
             mainCamera.SetActive(true);

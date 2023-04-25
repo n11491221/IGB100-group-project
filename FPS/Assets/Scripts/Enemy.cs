@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour {
     private float damageTime;
     private float damageRate = 0.5f;
 
+    private float detectionRange = 25;
+
     //Effects
     public GameObject deathEffect;
 
@@ -41,9 +43,12 @@ public class Enemy : MonoBehaviour {
 
     private void Movement()
     {
-        if (target)
-        
+        if (target && Vector3.Distance(target.transform.position, transform.position) <= detectionRange)
+        {
             agent.destination = target.transform.position;
+
+        }
+        
 
         
 

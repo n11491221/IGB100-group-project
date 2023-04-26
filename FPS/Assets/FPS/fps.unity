@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.40437093, g: 0.4670723, b: 0.48292595, a: 1}
+  m_IndirectSpecularColor: {r: 0.40425837, g: 0.4670974, b: 0.48306304, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -432,11 +432,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5f9b176058917ba49a8059f6da098866, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5f9b176058917ba49a8059f6da098866, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5f9b176058917ba49a8059f6da098866, type: 3}
       propertyPath: m_LocalRotation.y
@@ -444,7 +444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5f9b176058917ba49a8059f6da098866, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5f9b176058917ba49a8059f6da098866, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -588,7 +588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
-  fireRate: 0.15
+  fireRate: 1
   fireTime: 0
   muzzleFlash: {fileID: 159918, guid: 6ad830183bd89484989490e180fac965, type: 3}
   bulletHit: {fileID: 159918, guid: c739d85538d8be5479d89ead64e8d176, type: 3}
@@ -596,6 +596,7 @@ MonoBehaviour:
   target: {fileID: 465080146}
   fireSound: {fileID: 2296462190723339114, guid: 3470c4b8703982d46bc3a5ac4dbb270c,
     type: 3}
+  arrow: {fileID: 9000346977553405097, guid: 4d94c958dc357d743ad7d14bc577a8ba, type: 3}
 --- !u!1001 &1012661683
 PrefabInstance:
   m_ObjectHideFlags: 0

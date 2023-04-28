@@ -9,7 +9,7 @@ public class Weapon : MonoBehaviour
 
     //Damage variables
     public float damage = 10.0f;
-    public float fireRate = 0.15f;
+    public float fireRate = 1.0f;
     public float fireTime;
 
     //Spawn Effects and target objects
@@ -21,7 +21,8 @@ public class Weapon : MonoBehaviour
     //Audio effect
     public GameObject fireSound;
 
-
+    //Visual projectile
+    public GameObject arrow;
 
 
     // Start is called before the first frame update
@@ -42,25 +43,7 @@ public class Weapon : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && Time.time > fireTime)
         {
-            //Fire Effects
-            Instantiate(fireSound, transform.position, transform.rotation);
-            Instantiate(muzzleFlash, muzzle.transform.position, muzzle.transform.rotation);
-            animation.Play("fire");
-
-            //Raycast projectile
-            RaycastHit hit;
-            if (Physics.Raycast(muzzle.transform.position, -(muzzle.transform.position - target.transform.position).normalized, out hit, 50.0f))
-            {
-                //Damage enemies
-                if (hit.transform.tag == "Enemy")
-                {
-                    hit.transform.GetComponent<Enemy>().takeDamage(damage);
-                }
-
-                Instantiate(bulletHit, hit.transform.position, hit.transform.rotation);
-            }
-
-
+            Instantiate(arrow, transform.position, transform.rotation);
 
             //Setup next time to fire
             fireTime = Time.time + fireRate;

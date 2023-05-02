@@ -17,6 +17,10 @@ public class Enemy : MonoBehaviour {
 
     private float detectionRange = 25;
 
+    public bool walking = false;
+    public bool attacking = false;
+    public bool dead = false;
+
     //Effects
     public GameObject deathEffect;
 
@@ -37,8 +41,16 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Movement();
 
+        //make sure spider isnt dead
+        if (dead == false)
+        {
+            Movement();
+        }
+        else
+        {
+            agent.destination = transform.position;
+        }
 	}
 
     private void Movement()
@@ -46,7 +58,14 @@ public class Enemy : MonoBehaviour {
         if (target && Vector3.Distance(target.transform.position, transform.position) <= detectionRange)
         {
             agent.destination = target.transform.position;
+            
+            walking = true;
 
+        }
+        else
+        {
+            walking = false;
+            agent.destination = transform.position;
         }
         
 
@@ -60,16 +79,23 @@ public class Enemy : MonoBehaviour {
         health -= dmg;
 
         if (health <= 0) {
-            Destroy(this.gameObject);
-            Instantiate(deathEffect, transform.position, transform.rotation);
+            
+            //Instantiate(deathEffect, transform.position, transform.rotation);
+            dead = true;
+            Destroy(this.gameObject, 5);
         }
     }
 
     private void OnTriggerStay(Collider otherObject) {
-
-        if (otherObject.transform.tag == "Player" && Time.time > damageTime) {
+        //make sure dont do damage will it is dead
+        if (otherObject.transform.tag == "Player" && Time.time > damageTime && dead == false) {
             otherObject.GetComponent<Player>().takeDamage(damage);
             damageTime = Time.time + damageRate;
+            attacking = true;
+        }
+        else
+        {
+            attacking = false;
         }
     }
 }

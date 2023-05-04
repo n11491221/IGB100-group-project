@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.FirstPerson;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour
+{
 
     NavMeshAgent agent;
 
@@ -29,8 +30,9 @@ public class Enemy : MonoBehaviour {
     //Effects
     public GameObject deathEffect;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         agent = GetComponent<NavMeshAgent>();
 
         //Player Reference exception catching
@@ -38,15 +40,17 @@ public class Enemy : MonoBehaviour {
         {
             target = GameObject.FindGameObjectWithTag("Player");//Label names are case sensitive
             fpc = target.GetComponent<FirstPersonController>();
+
         }
         catch
         {
             target = null;
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         //make sure spider isnt dead
         if (dead == false)
@@ -57,15 +61,16 @@ public class Enemy : MonoBehaviour {
         {
             agent.destination = transform.position;
         }
-	}
+    }
 
     private void Movement()
     {
         UpdateDetectionRange();
+
         if (target && Vector3.Distance(target.transform.position, transform.position) <= currentDetectionRange)
         {
             agent.destination = target.transform.position;
-            
+
             walking = true;
 
         }
@@ -78,27 +83,42 @@ public class Enemy : MonoBehaviour {
 
     private void UpdateDetectionRange()
     {
+
+        RaycastHit hit = new RaycastHit();
+        if (target && Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position)
+        {
+            currentDetectionRange = 0;
+        }
+        else
+        {
+            currentDetectionRange = fpc.m_IsWalking ? walkDetectionRange : sprintDetectionRange;
+            currentDetectionRange = fpc.m_IsSneaking ? sneakDetectionRange : currentDetectionRange;
+        }
+
         // May want to change something here if we want the player to be able to hide behind trees or make the sneak mechanic better
-        currentDetectionRange = fpc.m_IsWalking ? walkDetectionRange : sprintDetectionRange;
-        currentDetectionRange = fpc.m_IsSneaking ? sneakDetectionRange: currentDetectionRange;
+
     }
 
 
     //Public method for taking damage and dying
-    public void takeDamage(float dmg) {
+    public void takeDamage(float dmg)
+    {
         health -= dmg;
 
-        if (health <= 0) {
-            
+        if (health <= 0)
+        {
+
             //Instantiate(deathEffect, transform.position, transform.rotation);
             dead = true;
             Destroy(this.gameObject, 5);
         }
     }
 
-    private void OnTriggerStay(Collider otherObject) {
+    private void OnTriggerStay(Collider otherObject)
+    {
         //make sure dont do damage will it is dead
-        if (otherObject.transform.tag == "Player" && Time.time > damageTime && dead == false) {
+        if (otherObject.transform.tag == "Player" && Time.time > damageTime && dead == false)
+        {
             otherObject.GetComponent<Player>().takeDamage(damage);
             damageTime = Time.time + damageRate;
             attacking = true;

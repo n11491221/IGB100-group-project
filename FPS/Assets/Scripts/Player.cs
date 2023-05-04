@@ -21,14 +21,6 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            Sneak();
-        } else
-        {
-            EndSneak();
-        }
-
 	}
 
     public void takeDamage(float dmg) {
@@ -42,13 +34,4 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void Sneak()
-    {
-        transform.localScale = new Vector3(1, 0.75f, 1);
-    }
-
-    public void EndSneak()
-    {
-        transform.localScale = new Vector3(1, 1, 1);
-    }
 }

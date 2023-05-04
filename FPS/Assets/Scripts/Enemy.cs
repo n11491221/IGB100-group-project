@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Enemy : MonoBehaviour {
 
@@ -10,12 +11,16 @@ public class Enemy : MonoBehaviour {
     public float health = 100;
 
     public GameObject target;
+    public FirstPersonController fpc;
 
     private float damage = 25;
     private float damageTime;
     private float damageRate = 0.5f;
 
-    private float detectionRange = 25;
+    private float currentDetectionRange = 25;
+    private float sneakDetectionRange = 10;
+    private float walkDetectionRange = 25;
+    private float sprintDetectionRange = 50;
 
     public bool walking = false;
     public bool attacking = false;
@@ -32,6 +37,7 @@ public class Enemy : MonoBehaviour {
         try
         {
             target = GameObject.FindGameObjectWithTag("Player");//Label names are case sensitive
+            fpc = target.GetComponent<FirstPersonController>();
         }
         catch
         {
@@ -55,7 +61,8 @@ public class Enemy : MonoBehaviour {
 
     private void Movement()
     {
-        if (target && Vector3.Distance(target.transform.position, transform.position) <= detectionRange)
+        UpdateDetectionRange();
+        if (target && Vector3.Distance(target.transform.position, transform.position) <= currentDetectionRange)
         {
             agent.destination = target.transform.position;
             
@@ -67,10 +74,13 @@ public class Enemy : MonoBehaviour {
             walking = false;
             agent.destination = transform.position;
         }
-        
+    }
 
-        
-
+    private void UpdateDetectionRange()
+    {
+        // May want to change something here if we want the player to be able to hide behind trees or make the sneak mechanic better
+        currentDetectionRange = fpc.m_IsWalking ? walkDetectionRange : sprintDetectionRange;
+        currentDetectionRange = fpc.m_IsSneaking ? sneakDetectionRange: currentDetectionRange;
     }
 
 

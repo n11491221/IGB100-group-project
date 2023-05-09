@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
     {
 
         //make sure spider isnt dead
-        if (dead == false)
+        if (!dead && !attacking)
         {
             Movement();
         }

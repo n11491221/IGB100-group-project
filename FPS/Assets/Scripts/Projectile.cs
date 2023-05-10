@@ -11,6 +11,8 @@ public class Projectile : MonoBehaviour
     public float damage = 10.0f;
     //public GameObject projectileHit;
 
+    public float rotateSpeed = 1.0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +29,8 @@ public class Projectile : MonoBehaviour
     private void Movement()
     {
         transform.position += Time.deltaTime * moveSpeed * transform.forward;
+        //Makes the arrow rotate
+        transform.Rotate(new Vector3(0, 0, rotateSpeed));
     }
 
     void OnTriggerEnter(Collider other)

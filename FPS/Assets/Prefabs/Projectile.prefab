@@ -62,6 +62,7 @@ MonoBehaviour:
   lifeTime: 3
   moveSpeed: 50
   damage: 100
+  rotateSpeed: 1
 --- !u!54 &2015265052043703490
 Rigidbody:
   m_ObjectHideFlags: 0

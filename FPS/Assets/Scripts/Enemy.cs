@@ -96,7 +96,6 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-
             if (!agent.pathPending)
             {
                 if (agent.remainingDistance <= agent.stoppingDistance)
@@ -104,76 +103,23 @@ public class Enemy : MonoBehaviour
                     if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                     {
                         isIdle = true;
-                        walking = false;
-                        agent.SetDestination(transform.position);
-                    } else
-                    {
-                        isIdle = false;
-                        walking = true;
-                        agent.SetDestination(lastKnownPlayerPosition);
+                        IdleMovement();
+                        return;
                     }
-                } else
-                {
-                    isIdle = false;
-                    walking = true;
-                    agent.SetDestination(lastKnownPlayerPosition);
                 }
             }
-            else
-            {
-                isIdle = false;
-                walking = true;
-                agent.SetDestination(lastKnownPlayerPosition);
-            }
-
-
-            /*
-            if (!isIdle && agent.CalculatePath(lastKnownPlayerPosition, new NavMeshPath()))  // if the enemy can get closer to lastKnownPlayerPosition
-            {
-                isIdle = false;
-                walking = true;
-                agent.SetDestination(lastKnownPlayerPosition);
-
-            }
-            else
-            {
-                // go idle
-                isIdle = true;
-                walking = false;
-                agent.SetDestination(transform.position);
-
-                rigidbody.velocity = Vector3.zero;
-
-            }
-            */
-
+            isIdle = false;
+            walking = true;
+            agent.SetDestination(lastKnownPlayerPosition);
         }
 
     }
 
-
+    // defines the enemies movement when idle (doesn't know where player is)
     private void IdleMovement()
     {
+        walking = false;
         agent.SetDestination(transform.position);
-    }
-
-    private void UpdateDetectionRange()
-    {
-        RaycastHit hit = new RaycastHit();
-        bool canSeePlayer = target && !(Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position);
-
-        if (canSeePlayer)
-        {
-            currentDetectionRange = fpc.m_IsWalking ? walkDetectionRange : sprintDetectionRange;
-            currentDetectionRange = fpc.m_IsSneaking ? sneakDetectionRange : currentDetectionRange;
-        }
-        else
-        {
-            currentDetectionRange = 0;
-        }
-
-        // May want to change something here if we want the player to be able to hide behind trees or make the sneak mechanic better
-
     }
 
 

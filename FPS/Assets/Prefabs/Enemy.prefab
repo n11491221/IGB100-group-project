@@ -66,6 +66,10 @@ MonoBehaviour:
   health: 100
   target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
   fpc: {fileID: 0}
+  points:
+  - {fileID: 7303773090912238468, guid: 342eb60a5ad26ba4bbf6ec32c960340a, type: 3}
+  - {fileID: 6382401117631901525, guid: aba4b60b7bdb4a243ac4eefd7e355690, type: 3}
+  - {fileID: 948492159282789214, guid: 0a6f5dc5425aa4f4bb0810988a15b6a3, type: 3}
   walking: 0
   attacking: 0
   dead: 0

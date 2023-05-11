@@ -21,18 +21,15 @@ public class Enemy : MonoBehaviour
 
     private Player player;
     private Vector3 lastKnownPlayerPosition;
-    private Vector3 currentPosition;
-    private Vector3 previousPosition;
+
 
     private Rigidbody rigidbody;
-    private bool isIdle = true;
+    private bool isOnPatrol = true;
 
 
-
-    private float currentDetectionRange = 25;
-    private float sneakDetectionRange = 10;
-    private float walkDetectionRange = 25;
-    private float sprintDetectionRange = 50;
+    //Patrol (idle movement)
+    public Transform[] points;
+    private int destPoint = 0;
 
     public bool walking = false;
     public bool attacking = false;
@@ -46,6 +43,11 @@ public class Enemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
+        agent.autoBraking = false;
+
+        agent.stoppingDistance = 1.0f;
+
+        GotoNextPoint();
         //Player Reference exception catching
         try
         {
@@ -79,49 +81,90 @@ public class Enemy : MonoBehaviour
 
     private void Movement()
     {
-        previousPosition = currentPosition;
-
-
         RaycastHit hit = new RaycastHit();
         bool canSeePlayer = target && !(Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position);
 
         if (canSeePlayer || Vector3.Distance(target.transform.position, transform.position) <= player.noiceLevel)
         {
-            isIdle = false;
+            isOnPatrol = false;
             walking = true;
             //agent.destination = target.transform.position;
             agent.SetDestination(target.transform.position);
             lastKnownPlayerPosition = target.transform.position;
 
         }
-        else
+        else if (!isOnPatrol /*agent.destination.Equals(lastKnownPlayerPosition)*/) 
         {
-            if (!agent.pathPending)
+            Debug.Log("IS NOT ON PATROL");
+            if (!agent.pathPending) //check if enemy has reach lastKnownPlayerPosition
             {
                 if (agent.remainingDistance <= agent.stoppingDistance)
                 {
                     if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                     {
-                        isIdle = true;
-                        IdleMovement();
+                        // If yes, start patrolling
+                        isOnPatrol = true;
+                        StartPatrol();
                         return;
                     }
                 }
             }
-            isIdle = false;
+            //if no, walk to lastKnownPlayerPosition
+            isOnPatrol = false;
             walking = true;
             agent.SetDestination(lastKnownPlayerPosition);
         }
+        else
+        {
+            Debug.Log("Is on patrol");
+            Patrol();
+        }
 
+
+
+
+    }
+
+    private void StartPatrol()
+    {
+        GotoNextPoint();
     }
 
     // defines the enemies movement when idle (doesn't know where player is)
-    private void IdleMovement()
+    private void Patrol()
     {
-        walking = false;
-        agent.SetDestination(transform.position);
+
+        // Choose the next destination point when the agent gets
+        // close to the current one.
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            GotoNextPoint();
+        } else
+        {
+            Debug.Log("agent.remainingDistance: " + agent.remainingDistance + "\n agent.pathPending: " + agent.pathPending);
+        }
+
+        //walking = false;
+        //agent.SetDestination(transform.position);
     }
 
+    void GotoNextPoint()
+    {
+        // Returns if no points have been set up
+        if (points.Length == 0)
+        {
+            return;
+        }
+
+        // Set the agent to go to the currently selected destination.
+        agent.destination = points[destPoint].position;
+
+        // Choose the next point in the array as the destination,
+        // cycling to the start if necessary.
+        destPoint = (destPoint + 1) % points.Length;
+
+        Debug.Log("agent.destination = " + agent.destination + "\ndestPoint: " + destPoint);
+    }
 
     //Public method for taking damage and dying
     public void takeDamage(float dmg)

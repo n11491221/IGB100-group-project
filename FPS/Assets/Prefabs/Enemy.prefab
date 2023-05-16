@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7579472015674258195}
   - component: {fileID: 2009032528664057831}
   - component: {fileID: 2697922619747292205}
+  - component: {fileID: 7399086045205548543}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -46,8 +47,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1
-  m_Height: 0.1
+  m_Radius: 2
+  m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7579472015674258190
@@ -65,6 +66,10 @@ MonoBehaviour:
   health: 100
   target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
   fpc: {fileID: 0}
+  points:
+  - {fileID: 7303773090912238468, guid: 342eb60a5ad26ba4bbf6ec32c960340a, type: 3}
+  - {fileID: 6382401117631901525, guid: aba4b60b7bdb4a243ac4eefd7e355690, type: 3}
+  - {fileID: 948492159282789214, guid: 0a6f5dc5425aa4f4bb0810988a15b6a3, type: 3}
   walking: 0
   attacking: 0
   dead: 0
@@ -123,6 +128,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 7579472015674258190}
+--- !u!54 &7399086045205548543
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7579472015674258191}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &3603286068776565353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -143,7 +164,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2761082c7dc2b614392d66e8f87713e8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.233
+      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2761082c7dc2b614392d66e8f87713e8,
         type: 3}

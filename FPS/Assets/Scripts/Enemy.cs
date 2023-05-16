@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.FirstPerson;
+using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : MonoBehaviour
 {
@@ -18,10 +19,17 @@ public class Enemy : MonoBehaviour
     private float damageTime;
     private float damageRate = 0.5f;
 
-    private float currentDetectionRange = 25;
-    private float sneakDetectionRange = 10;
-    private float walkDetectionRange = 25;
-    private float sprintDetectionRange = 50;
+    private Player player;
+    private Vector3 lastKnownPlayerPosition;
+
+
+    private Rigidbody rigidbody;
+    private bool isOnPatrol = true;
+
+
+    //Patrol (idle movement)
+    public Transform[] points;
+    private int destPoint = 0;
 
     public bool walking = false;
     public bool attacking = false;
@@ -35,11 +43,19 @@ public class Enemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
+        agent.autoBraking = false;
+
+        agent.stoppingDistance = 1.0f;
+
+        GotoNextPoint();
         //Player Reference exception catching
         try
         {
             target = GameObject.FindGameObjectWithTag("Player");//Label names are case sensitive
             fpc = target.GetComponent<FirstPersonController>();
+
+            player = target.GetComponent<Player>();
+            rigidbody = this.GetComponent<Rigidbody>();
 
         }
         catch
@@ -53,7 +69,7 @@ public class Enemy : MonoBehaviour
     {
 
         //make sure spider isnt dead
-        if (dead == false)
+        if (!dead && !attacking)
         {
             Movement();
         }
@@ -65,40 +81,90 @@ public class Enemy : MonoBehaviour
 
     private void Movement()
     {
-        UpdateDetectionRange();
+        RaycastHit hit = new RaycastHit();
+        bool canSeePlayer = target && !(Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position);
 
-        if (target && Vector3.Distance(target.transform.position, transform.position) <= currentDetectionRange)
+        if (canSeePlayer || Vector3.Distance(target.transform.position, transform.position) <= player.noiceLevel)
         {
-            agent.destination = target.transform.position;
-
+            isOnPatrol = false;
             walking = true;
+            //agent.destination = target.transform.position;
+            agent.SetDestination(target.transform.position);
+            lastKnownPlayerPosition = target.transform.position;
 
+        }
+        else if (!isOnPatrol /*agent.destination.Equals(lastKnownPlayerPosition)*/) 
+        {
+            Debug.Log("IS NOT ON PATROL");
+            if (!agent.pathPending) //check if enemy has reach lastKnownPlayerPosition
+            {
+                if (agent.remainingDistance <= agent.stoppingDistance)
+                {
+                    if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                    {
+                        // If yes, start patrolling
+                        isOnPatrol = true;
+                        StartPatrol();
+                        return;
+                    }
+                }
+            }
+            //if no, walk to lastKnownPlayerPosition
+            isOnPatrol = false;
+            walking = true;
+            agent.SetDestination(lastKnownPlayerPosition);
         }
         else
         {
-            walking = false;
-            agent.destination = transform.position;
+            Debug.Log("Is on patrol");
+            Patrol();
         }
+
+
+
+
     }
 
-    private void UpdateDetectionRange()
+    private void StartPatrol()
+    {
+        GotoNextPoint();
+    }
+
+    // defines the enemies movement when idle (doesn't know where player is)
+    private void Patrol()
     {
 
-        RaycastHit hit = new RaycastHit();
-        if (target && Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position)
+        // Choose the next destination point when the agent gets
+        // close to the current one.
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
-            currentDetectionRange = 0;
-        }
-        else
+            GotoNextPoint();
+        } else
         {
-            currentDetectionRange = fpc.m_IsWalking ? walkDetectionRange : sprintDetectionRange;
-            currentDetectionRange = fpc.m_IsSneaking ? sneakDetectionRange : currentDetectionRange;
+            Debug.Log("agent.remainingDistance: " + agent.remainingDistance + "\n agent.pathPending: " + agent.pathPending);
         }
 
-        // May want to change something here if we want the player to be able to hide behind trees or make the sneak mechanic better
-
+        //walking = false;
+        //agent.SetDestination(transform.position);
     }
 
+    void GotoNextPoint()
+    {
+        // Returns if no points have been set up
+        if (points.Length == 0)
+        {
+            return;
+        }
+
+        // Set the agent to go to the currently selected destination.
+        agent.destination = points[destPoint].position;
+
+        // Choose the next point in the array as the destination,
+        // cycling to the start if necessary.
+        destPoint = (destPoint + 1) % points.Length;
+
+        Debug.Log("agent.destination = " + agent.destination + "\ndestPoint: " + destPoint);
+    }
 
     //Public method for taking damage and dying
     public void takeDamage(float dmg)
@@ -110,11 +176,14 @@ public class Enemy : MonoBehaviour
 
             //Instantiate(deathEffect, transform.position, transform.rotation);
             dead = true;
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.isKinematic = true;
+
             Destroy(this.gameObject, 5);
         }
     }
 
-    private void OnTriggerStay(Collider otherObject)
+    private void OnTriggerEnter(Collider otherObject)
     {
         //make sure dont do damage will it is dead
         if (otherObject.transform.tag == "Player" && Time.time > damageTime && dead == false)
@@ -128,4 +197,10 @@ public class Enemy : MonoBehaviour
             attacking = false;
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        attacking = false;
+    }
+
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.FirstPerson;
 using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Enemy : MonoBehaviour
     NavMeshAgent agent;
 
     public float health = 100;
+
+    
 
     public GameObject target;
     public FirstPersonController fpc;
@@ -38,9 +41,19 @@ public class Enemy : MonoBehaviour
     //Effects
     public GameObject deathEffect;
 
+    //Enemy Heath bar
+    private float maxHealth;
+    public Slider Ehealthbar;
+
     // Use this for initialization
     void Start()
     {
+
+        //Enemies renew their health when they start.
+        maxHealth = health;
+        //gameObject.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = health;
+        //gameObject.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = health;
+
         agent = GetComponent<NavMeshAgent>();
 
         agent.autoBraking = false;
@@ -171,6 +184,9 @@ public class Enemy : MonoBehaviour
     {
         health -= dmg;
 
+        //If the enemy is not dead, but only receives damage, update the health bar (value).
+        Ehealthbar.value = (health / maxHealth);
+
         if (health <= 0)
         {
 
@@ -180,6 +196,7 @@ public class Enemy : MonoBehaviour
             rigidbody.isKinematic = true;
 
             Destroy(this.gameObject, 5);
+            GameManager.instance.score += 1;
         }
     }
 

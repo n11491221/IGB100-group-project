@@ -13,6 +13,21 @@ public class GameManager : MonoBehaviour {
 
     public GameObject player;
 
+    //UI Elements
+    public Text enemiseRemainingText;
+    //public Text timeRemainingText;
+    public Text scoreText;
+    public Text gameOverText;
+
+    //Game Elements
+    public GameObject[] enemies;
+    public int score = 0;
+
+    public bool gameOver = false;
+    public bool dead = false;
+
+
+
     // Awake Checks - Singleton setup
     void Awake() {
 
@@ -38,5 +53,51 @@ public class GameManager : MonoBehaviour {
 
         time += Time.deltaTime;
         //time = Time.time;
-	}
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        GameConditions();
+
+        UpdateUI();
+    }
+
+    private void GameConditions()
+    {
+        if (!player)
+        {
+            gameOver = true;
+            dead = true;
+        }
+        // LOOK!
+        //This can be changed to open the portal and then change the end.
+        //else if (time > maxTime && enemies.Length == 0)
+        //    gameOver = true;
+        if (gameOver)
+        {
+            if (score > PlayerPrefs.GetInt("HighScore", 0))
+            {
+                PlayerPrefs.SetInt("HighScore", score);
+            }
+
+        }
+    }
+
+    private void UpdateUI()
+    {
+        //Enemy
+        enemiseRemainingText.text = "Eneies Remaining:" + enemies.Length;
+
+        //Time
+        //timeRemainingText.text = "Time Remaining:" + (int)(maxTime - time);
+
+        //Score
+        scoreText.text = "Score:" + score;
+
+        //Endgame Text
+        if (gameOver && dead)
+        {
+            gameOverText.text = "You are Dead";
+        }
+        else if (gameOver)
+            gameOverText.text = "You Win!";
+    }
 }

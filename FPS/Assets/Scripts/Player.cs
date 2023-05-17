@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
 
     public float health = 100;
-    private float maxHealth;
+    
 
     public GameObject mainCamera;
 
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
 
 
     //UI Elements
+    private float maxHealth;
     public Slider healthbar;
 
     // Use this for initialization
@@ -66,7 +67,7 @@ public class Player : MonoBehaviour
     {
         health -= dmg;
 
-        //healthbar.value = (health / maxHealth);
+        healthbar.value = (health / maxHealth);
 
         if (health <= 0)
         {

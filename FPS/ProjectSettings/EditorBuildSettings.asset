@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/FPS/fps.unity
     guid: c88710de41d15904dbb134879e2ddc10
+  - enabled: 1
+    path: Assets/Scene/win.unity
+    guid: ac57750f8f425db46a0434d87a7047bc
+  - enabled: 1
+    path: Assets/Scene/lose.unity
+    guid: 223e00b11200c914999dde61bf842d9c
   m_configObjects: {}

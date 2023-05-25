@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
 
     public float health = 100;
-    
+
 
     public GameObject mainCamera;
 
@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
     private Vector3 currentPosition;
     private Vector3 previousPosition;
 
-
+    public bool gameOver = false;
+    public int[] keysCollected;
 
 
 
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
     {
         maxHealth = health;
         fpc = GetComponent<FirstPersonController>(); // not sure if this works
+        keysCollected = new int[] { 0, 0, 0 };
     }
 
     // Update is called once per frame
@@ -55,10 +57,11 @@ public class Player : MonoBehaviour
         if (currentPosition == previousPosition)
         {
             noiceLevel = 0;
-        } else
+        }
+        else
         {
             noiceLevel = fpc.m_IsWalking ? walkNoiceLevel : runNoiceLevel;
-            noiceLevel = fpc.m_IsSneaking ? sneakNoiceLevel: noiceLevel;
+            noiceLevel = fpc.m_IsSneaking ? sneakNoiceLevel : noiceLevel;
         }
 
     }
@@ -73,6 +76,35 @@ public class Player : MonoBehaviour
         {
             mainCamera.SetActive(true);
             Destroy(this.gameObject);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.Equals("Pedestal"))
+        {
+            if (other.transform.position.z > 30)
+            {
+                keysCollected[0] = 1;
+            }
+            else if (other.transform.position.z < -30)
+            {
+                keysCollected[1] = 1;
+            }
+            else
+            {
+                keysCollected[2] = 1;
+            }
+
+        }
+        else if (other.tag.Equals("Portal"))
+        {
+            int sumOfKeys = keysCollected[0] + keysCollected[1] + keysCollected[2];
+            if (sumOfKeys == 3)
+            {
+                gameOver = true;
+                // TODO: change to the win scene
+            }
         }
     }
 

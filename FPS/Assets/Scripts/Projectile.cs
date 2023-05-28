@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour
     public float lifeTime = 3.0f;
     public float moveSpeed = 50.0f;
 
-    public float damage = 10.0f;
+    public float damage = 25.0f;
     //public GameObject projectileHit;
 
     public float rotateSpeed = 1.0f;

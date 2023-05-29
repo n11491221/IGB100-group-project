@@ -13,8 +13,8 @@ public class Enemy : MonoBehaviour
 
     public float health = 100;
 
-    
-
+    AudioSource audioS;
+    public AudioClip runing;
     public GameObject target;
     public FirstPersonController fpc;
 
@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        audioS = GetComponent<AudioSource>();// 
         //Enemies renew their health when they start.
         maxHealth = health;
         //gameObject.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = health;
@@ -94,6 +94,8 @@ public class Enemy : MonoBehaviour
 
     private void Movement()
     {
+        audioS.clip = runing;
+        audioS.Play();
         RaycastHit hit = new RaycastHit();
         bool canSeePlayer = target && !(Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position);
 

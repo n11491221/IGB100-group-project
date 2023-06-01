@@ -9,6 +9,7 @@ TagManager:
   - Pedestal
   - Portal
   - Key
+  - TransparentCollider
   layers:
   - Default
   - TransparentFX

@@ -455,7 +455,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  uiImage: {fileID: 7533634833160318368, guid: e6c9f39033229d74698c88ba02d02e90, type: 3}
   runing: {fileID: 8300000, guid: f55b0816750d56d46bd8f6744fb3ef6f, type: 3}
+  die: {fileID: 8300000, guid: 942eecbf329797648944175e774a1155, type: 3}
+  see: {fileID: 8300000, guid: 0a044939a3c67244896f95b5756b55b9, type: 3}
   target: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
   fpc: {fileID: 0}
   points:
@@ -548,7 +551,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

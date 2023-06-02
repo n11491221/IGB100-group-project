@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class MenuList : MonoBehaviour
 {
     public GameObject menuList;
@@ -11,7 +12,7 @@ public class MenuList : MonoBehaviour
     //[SerializeField] private AudioSource bgmSound;//BGM Open and stop
     void Start()
     {
-        
+        Time.timeScale = 1f;
     }
 
     // Update is called once per frame
@@ -19,19 +20,25 @@ public class MenuList : MonoBehaviour
     {
         if (menuKeys)
         {
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 menuList.SetActive(true);
                 menuKeys = false;
                 Time.timeScale = (0);
+                
                 //bgmSound.Pause();
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Tab))
+        else if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             menuList.SetActive(false);
             menuKeys = true;
             Time.timeScale = (1);
+            
             //bgmSound.Pause();
 
         }
@@ -45,10 +52,18 @@ public class MenuList : MonoBehaviour
         Time.timeScale = (1);
         //bgmSound.Pause();
     }
+    public void mainMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
     public void MineMenu()
     {
         SceneManager.LoadScene(0);
         Time.timeScale = 1;
+    }
+    public void playGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 0);
     }
     public void Restart()
     {

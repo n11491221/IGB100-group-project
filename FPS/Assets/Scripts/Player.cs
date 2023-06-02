@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -76,6 +77,8 @@ public class Player : MonoBehaviour
         {
             mainCamera.SetActive(true);
             Destroy(this.gameObject);
+            SceneManager.LoadScene("lose");
+
         }
     }
 
@@ -84,7 +87,7 @@ public class Player : MonoBehaviour
         if (other.tag.Equals("Pedestal"))
         {
             if (other.transform.position.z > 30)
-            {
+           {
                 keysCollected[0] = 1;
             }
             else if (other.transform.position.z < -30)
@@ -92,10 +95,10 @@ public class Player : MonoBehaviour
                 keysCollected[1] = 1;
             }
             else
-            {
+           {
                 keysCollected[2] = 1;
             }
-
+    
         }
         else if (other.tag.Equals("Portal"))
         {
@@ -104,6 +107,8 @@ public class Player : MonoBehaviour
             {
                 gameOver = true;
                 // TODO: change to the win scene
+                SceneManager.LoadScene("win");
+
             }
         }
     }

@@ -1,22 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.AI;
+using UnityStandardAssets.Characters.FirstPerson;
 
-public class EnemySpawner : MonoBehaviour {
+public class EnemySpawner : MonoBehaviour
+{
 
     public GameObject enemy;
 
+    public Player player;
 
-    public float spawnRate = 3.0f;
+    private bool hasSpawnedGuardian = false;
 
-    private float spawnTimer;
-
-	// Update is called once per frame
-	void Update () {
-        if (GameManager.instance.time < GameManager.instance.maxTime && Time.time > spawnTimer) {
-            Instantiate(enemy, transform.position, transform.rotation);
-            spawnTimer = Time.time + spawnRate;
-
+    void Start()
+    {
+        //Player Reference exception catching
+        try
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();//Label names are case sensitive
         }
-	}
+        catch
+        {
+            player = null;
+        }
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+
+
+        if (player && !hasSpawnedGuardian)
+        {
+            int keysCollected = 0;
+
+            foreach (int key in player.keysCollected)
+            {
+                keysCollected += key;
+            }
+
+            if (keysCollected == 3)
+            {
+                Instantiate(enemy, transform.position, transform.rotation);
+                hasSpawnedGuardian = true;
+            }
+        }
+    }
 }

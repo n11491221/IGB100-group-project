@@ -56,9 +56,9 @@ public class Enemy : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        audioS = GetComponent<AudioSource>();// 
         //Enemies renew their health when they start.
         maxHealth = health;
+        audioS = GetComponent<AudioSource>();// 
         //gameObject.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = health;
         //gameObject.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = health;
 
@@ -109,11 +109,12 @@ public class Enemy : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         bool canSeePlayer = target && !(Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position);
         bool canHearPlayer = Vector3.Distance(target.transform.position, transform.position) <= player.noiceLevel;
-
-        if (canSeePlayer || canHearPlayer)
-        uiImage.gameObject.SetActive(true);//The enemy finds the player.
         audioS.clip = runing;
         audioS.Play();
+        if (canSeePlayer || canHearPlayer)
+        uiImage.gameObject.SetActive(true);//The enemy finds the player.
+        //audioS.clip = runing;
+        //audioS.Play();
         if (canSeePlayer || Vector3.Distance(target.transform.position, transform.position) <= player.noiceLevel)
         {
             isOnPatrol = false;

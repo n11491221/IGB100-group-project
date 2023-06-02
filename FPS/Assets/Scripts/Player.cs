@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -104,6 +105,8 @@ public class Player : MonoBehaviour
             {
                 gameOver = true;
                 // TODO: change to the win scene
+                SceneManager.LoadScene("win");
+
             }
         }
     }

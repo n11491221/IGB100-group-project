@@ -77,6 +77,8 @@ public class Player : MonoBehaviour
         {
             mainCamera.SetActive(true);
             Destroy(this.gameObject);
+            SceneManager.LoadScene("lose");
+
         }
     }
 

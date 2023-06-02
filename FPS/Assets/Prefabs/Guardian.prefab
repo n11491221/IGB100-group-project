@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 567c425796ced0147ac844b19ad3a775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1000
+  health: 500
   uiImage: {fileID: 7533634833160318368, guid: e6c9f39033229d74698c88ba02d02e90, type: 3}
   runing: {fileID: 8300000, guid: f55b0816750d56d46bd8f6744fb3ef6f, type: 3}
   die: {fileID: 8300000, guid: 942eecbf329797648944175e774a1155, type: 3}

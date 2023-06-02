@@ -77,6 +77,8 @@ public class Player : MonoBehaviour
         {
             mainCamera.SetActive(true);
             Destroy(this.gameObject);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("lose");
 
         }
@@ -107,6 +109,9 @@ public class Player : MonoBehaviour
             {
                 gameOver = true;
                 // TODO: change to the win scene
+                Destroy(this.gameObject);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
                 SceneManager.LoadScene("win");
 
             }

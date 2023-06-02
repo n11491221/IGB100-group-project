@@ -8,6 +8,8 @@ TagManager:
   - Obstacle
   - Pedestal
   - Portal
+  - Key
+  - TransparentCollider
   layers:
   - Default
   - TransparentFX

@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 
     //Singleton Setup
     public static GameManager instance = null;
+    
 
     public float time;
     public float maxTime = 15;

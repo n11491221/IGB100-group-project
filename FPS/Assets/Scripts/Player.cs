@@ -85,7 +85,7 @@ public class Player : MonoBehaviour
         if (other.tag.Equals("Pedestal"))
         {
             if (other.transform.position.z > 30)
-            {
+           {
                 keysCollected[0] = 1;
             }
             else if (other.transform.position.z < -30)
@@ -93,10 +93,10 @@ public class Player : MonoBehaviour
                 keysCollected[1] = 1;
             }
             else
-            {
+           {
                 keysCollected[2] = 1;
             }
-
+    
         }
         else if (other.tag.Equals("Portal"))
         {

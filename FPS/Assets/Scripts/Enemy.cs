@@ -13,7 +13,14 @@ public class Enemy : MonoBehaviour
     NavMeshAgent agent;
 
     public float health = 100;
+    //public GameObject enemyImage;
+    public Image uiImage;
 
+
+    AudioSource audioS;
+    public AudioClip runing;
+    public AudioClip die;
+    public AudioClip see;
     public GameObject target;
     public FirstPersonController fpc;
 
@@ -49,7 +56,7 @@ public class Enemy : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        audioS = GetComponent<AudioSource>();// 
         //Enemies renew their health when they start.
         maxHealth = health;
         //gameObject.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = health;
@@ -98,14 +105,22 @@ public class Enemy : MonoBehaviour
 
     private void Movement()
     {
+        
         RaycastHit hit = new RaycastHit();
         bool canSeePlayer = target && !(Physics.Linecast(transform.position, target.transform.position, out hit) && hit.transform.position != target.transform.position);
         bool canHearPlayer = Vector3.Distance(target.transform.position, transform.position) <= player.noiceLevel;
 
         if (canSeePlayer || canHearPlayer)
+        uiImage.gameObject.SetActive(true);//The enemy finds the player.
+        audioS.clip = runing;
+        audioS.Play();
+        if (canSeePlayer || Vector3.Distance(target.transform.position, transform.position) <= player.noiceLevel)
         {
             isOnPatrol = false;
             walking = true;
+            audioS.clip = see;
+            audioS.Play();
+            //found player
             //agent.destination = target.transform.position;
             agent.SetDestination(target.transform.position);
             lastKnownPlayerPosition = target.transform.position;
@@ -192,12 +207,14 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
-
+            uiImage.gameObject.SetActive(false);//Enemy death Disappear UI.
+            audioS.clip = die;
+            audioS.Play();
             //Instantiate(deathEffect, transform.position, transform.rotation);
             dead = true;
             rigidbody.velocity = Vector3.zero;
             rigidbody.isKinematic = true;
-
+            //enemyImage.SetActive(false);//found player
             Destroy(this.gameObject, 5);
             GameManager.instance.score += 1;
         }
